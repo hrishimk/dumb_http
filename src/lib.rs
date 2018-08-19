@@ -5,7 +5,7 @@ use std::net::TcpStream;
 //struct HttpRespBuilder {}
 
 pub mod cookie_manager;
-use cookie_manager::CookieManager;
+pub use cookie_manager::CookieManager;
 
 pub struct HttpResp<'a> {
     stream: &'a mut TcpStream,
