@@ -89,7 +89,6 @@ impl<'a> HttpResp<'a> {
                 self.set_body(x);
             }
             Err(x) => {
-                println!("file error {:?}", x);
                 self.set_header("Content-Type".to_string(), "text/plain".to_string());
                 self.set_body(b"Not Found".to_vec());
             }
