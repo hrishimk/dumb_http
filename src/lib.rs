@@ -55,26 +55,27 @@ impl<'a> HttpResp<'a> {
         self.set_header("Location".to_string(), page.to_string());
     }
 
-    pub fn write(&mut self) {
-        let resp = b"HTTP/1.1 200 OK\r\n";
-        self.stream.write(b"HTTP/1.1 ");
-        self.stream.write(self.status.to_string().as_bytes());
-        self.stream.write(b" OK\r\n");
+    pub fn write(&mut self) -> std::io::Result<()> {
+        self.stream.write(b"HTTP/1.1 ")?;
+        self.stream.write(self.status.to_string().as_bytes())?;
+        self.stream.write(b" OK\r\n")?;
 
         for (key, value) in &self.headers {
             for n in value {
-                self.stream.write(key.as_bytes());
-                self.stream.write(b": ");
-                self.stream.write(n.as_bytes());
-                self.stream.write(b"\r\n");
+                self.stream.write(key.as_bytes())?;
+                self.stream.write(b": ")?;
+                self.stream.write(n.as_bytes())?;
+                self.stream.write(b"\r\n")?;
             }
         }
 
-        self.stream.write(b"\r\n");
+        self.stream.write(b"\r\n")?;
 
-        self.stream.write(&self.body);
+        self.stream.write(&self.body)?;
 
-        self.stream.flush();
+        self.stream.flush()?;
+
+        Ok(())
     }
 
     pub fn file(&mut self, path: &str) {
@@ -87,7 +88,7 @@ impl<'a> HttpResp<'a> {
                 );
                 self.set_body(x);
             }
-            Err(x) => {
+            Err(_x) => {
                 self.set_header("Content-Type".to_string(), "text/plain".to_string());
                 self.set_body(b"Not Found".to_vec());
             }
