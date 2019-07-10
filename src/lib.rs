@@ -9,7 +9,6 @@ use std::io::prelude::*;
 use std::net::TcpStream;
 
 use std::fs;
-use std::io::prelude::*;
 
 pub mod cookie_manager;
 pub use cookie_manager::{Cookie, CookieManager};

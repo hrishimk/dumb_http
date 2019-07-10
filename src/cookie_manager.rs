@@ -1,5 +1,5 @@
+use rand::distributions::Alphanumeric;
 use std::collections::HashMap;
-use std::sync::{Arc, Mutex};
 
 use chrono::prelude::*;
 
@@ -52,7 +52,7 @@ impl<'a> Cookie<'a> {
     }
 
     fn gen_cookie_val() -> String {
-        thread_rng().gen_ascii_chars().take(30).collect::<String>()
+        thread_rng().sample_iter(Alphanumeric).take(30).collect()
     }
 
     pub fn get_value(&self) -> &str {
